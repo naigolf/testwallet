@@ -1,0 +1,28 @@
+name: Run Bitkub Wallet
+
+on:
+  workflow_dispatch:  # รันด้วยมือจาก GitHub UI
+  schedule:
+    - cron: '0 * * * *' # รันทุกชั่วโมง
+
+jobs:
+  call-wallet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install axios
+        run: npm install axios
+
+      - name: Run wallet script
+        env:
+          BTK_API_KEY: ${{ secrets.BTK_API_KEY }}
+          BTK_API_SECRET: ${{ secrets.BTK_API_SECRET }}
+        run: node index.js
